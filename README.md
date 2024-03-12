@@ -3,7 +3,11 @@ Microservice using FastAPI
 
 In this project, I built a simple machine-learning microservice using FastAPI. 
 
-<b>Highlights:</b>
-- used api-key to secure the API
-- implemented data/field validation, auto-type conversion, & serialization using pydantic
-- feature engineering
+<b>Key Highlights:</b>
+- used api-key feature to secure the API (checkout last version)
+- dockerize the REST endpoint service
+- implemented data/field validator, auto-type conversion, & serialization using pydantic
+- perform feature engineering
+- implemented REST endpoint 
+
+<b>Blog:</b> https://medium.com/@ronilpatil/build-ml-microservices-using-fastapi-e7c8a0dd5ef0
