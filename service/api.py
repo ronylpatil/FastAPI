@@ -1,21 +1,14 @@
 import pathlib
 import joblib
-from fastapi import FastAPI, HTTPException, status, Depends
-from fastapi.security import OAuth2PasswordBearer
+from fastapi import FastAPI
 from pydantic import BaseModel, Field
 
-
 app = FastAPI()
-api_keys = ['xgb0fws23']  # This is encrypted in the database
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl = 'token')  # use token authentication
-
-def api_key_auth(api_key: str = Depends(oauth2_scheme)) :
-     if api_key not in api_keys :
-          raise HTTPException(
-               status_code = status.HTTP_401_UNAUTHORIZED,
-               detail = 'Invalid API key, please check the key'
-          )
+curr_dir = pathlib.Path(__file__)
+home_dir = curr_dir.parent.parent                      # directory management
+path = f"{home_dir.as_posix()}/models/model.joblib"    # model location
+model = joblib.load(path)                              # loading the model
 
 class WineqIp(BaseModel) : 
      fixed_acidity : float = Field(..., ge = 4.1, le = 16.4)
@@ -54,8 +47,8 @@ def feat_gen(user_input: dict) -> dict :
 
 
 # add dependencies = [Depends(api_key_auth)] after 'predict/'
-@app.post('/predict', dependencies = [Depends(api_key_auth)])
-async def predict_wineq(user_input : WineqIp) -> dict :
+@app.post('/predict')
+def predict_wineq(user_input : WineqIp) -> dict :
      processed_data = feat_gen(user_input.model_dump())
 
      input_data =   [[processed_data['fixed_acidity'], processed_data['volatile_acidity'], processed_data['citric_acid'], processed_data['residual_sugar'],
@@ -65,11 +58,6 @@ async def predict_wineq(user_input : WineqIp) -> dict :
                     processed_data['residual_sugar_to_citric_acid_ratio'], processed_data['alcohol_to_density_ratio'], processed_data['total_alkalinity'], 
                     processed_data['total_minerals']]]
 
-     curr_dir = pathlib.Path(__file__)
-     home_dir = curr_dir.parent.parent
-     path = f"{home_dir.as_posix()}/models/model.joblib"
-
-     model = joblib.load(path)
      prediction = model.predict(input_data).tolist()
      pred_prob = model.predict_proba(input_data).tolist()
 
