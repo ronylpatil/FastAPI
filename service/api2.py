@@ -28,7 +28,8 @@ class PredictionRequest(BaseModel):
 async def predict(data: str) -> int:
     # Your prediction logic here
     await asyncio.sleep(1)  # Simulate IO-bound operation
-    if len(data) > 20:
+    # count #words 
+    if len(data.split(' ')) > 20:
         return 1
     else:
         return 0
