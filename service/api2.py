@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 
-# CORS
+# CORS Middleware allow FastAPI to filter and control incomming requests from different origin (ex. frontend)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=['*'],
