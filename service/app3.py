@@ -57,8 +57,10 @@ async def predict(data: str) -> int:
     await asyncio.sleep(1)
     
     # For example, if there are more than 20 words in the data, return 1
-    if len(data.split(' ')) > 20:
+    if len(data.split(' ')) <= 20 :
         return 1
+    elif 20 < len(data.split(' ')) <= 40 :
+        return 2
     else:
         return 0
 
@@ -82,4 +84,3 @@ if __name__ == "__main__":
 # app_name: api3 (file name)
 # port: 8000 (default)
 # cmd: uvicorn service.app3:app --reload
-    
