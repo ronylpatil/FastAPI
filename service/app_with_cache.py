@@ -1,16 +1,18 @@
 import logging
 import asyncio
 import pathlib
+import hashlib
+import diskcache as dc
 from pydantic import BaseModel
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
-import diskcache as dc
-import hashlib
+
+
 
 app = FastAPI()
 
-# CORS Middleware to allow FastAPI to filter and control incoming requests from different origins
+# CORS Middleware to allow FastAPI to filter and control incoming requests from different website/domain
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -77,7 +79,7 @@ async def predict(data: str) -> int:
 
 # Define the prediction endpoint
 @app.post("/predict", response_model=PredictionRequest)
-async def predict_endpoint(request: PredictionRequest):
+async def predict_endpoint(request: PredictionRequest) -> JSONResponse:
     try:
         # Get the cached prediction or compute it if not in cache
         prediction = await get_cached_prediction(request.data)
