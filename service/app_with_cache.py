@@ -9,7 +9,6 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 
-
 app = FastAPI()
 
 # CORS Middleware to allow FastAPI to filter and control incoming requests from different website/domain
@@ -32,8 +31,9 @@ logger = logging.getLogger(__name__)
 
 
 # Create a disk cache instance
-# cache = dc.Cache("./cache")  # Specify your cache directory
-cache = dc.Cache(pathlib.Path("./cache").mkdir(parents=True, exist_ok=True) )
+pathlib.Path("./cache").mkdir(parents=True, exist_ok=True)
+cache = dc.Cache("./cache")  # Specify your cache directory
+
 
 # Define a Pydantic model for the prediction request
 class PredictionRequest(BaseModel):
