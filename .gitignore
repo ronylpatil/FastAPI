@@ -87,3 +87,6 @@ target/
 
 # Mypy cache
 .mypy_cache/
+
+# exclude secrets.yaml (storing secret keys)
+secrets.yaml

@@ -1,30 +1,39 @@
 import json
+import yaml
 import redis
 import random
+import pathlib
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
 
+# load password from secrets.yaml
+key = yaml.safe_load(open(f"{pathlib.Path(__name__).parent.parent.as_posix()}/secrets.yaml"))['redis_key']
+
 app = FastAPI()
-rd = redis.Redis(host="localhost", port=6379, db=0)
+rd = redis.Redis(host='electric-stinkbug-37907.upstash.io',
+        port=6379,
+        password=key,
+        ssl=True
+    )
 
 @app.get("/")
 def read_root() : 
     return "Hello World!"
 
 @app.get("/name/{user_name}")
-def greeting(user_name:str) :
+def get_passkey(user_name:str) :
     cache = rd.get(user_name)
     if cache :
         print('cache hit!') 
         return json.loads(cache)        # convert JSON to python dict
     else : 
         print('cache miss!')
-        r = {"user": user_name.title(), "passkey" : random.randint(00000,99999)}
+        r = {"user": user_name.title(), "passkey" : random.randint(00000, 99999)}
         rd.set(user_name, json.dumps(r))        # json.dumps - convert JSON HTTP response type into JSON string, making it suitable for redis db
         return JSONResponse(r)
 
-# if __name__ == "__main__" : 
-#     import uvicorn
-#     uvicorn.run(app, host="127.0.0.1", port=8000)
+if __name__ == "__main__" : 
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
-# install "httpie" to access API through "http :8000" cmd.
+# install "httpie" to access API through "http :8000/name/..." cmd.
