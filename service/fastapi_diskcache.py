@@ -23,11 +23,11 @@ def get_passkey(user_name: str):
     cache_data = cache.get(user_name)
     if cache_data:
         print("cache hit!")
-        return json.loads(cache_data)  # convert string to JSON type
+        return json.loads(cache_data)       # convert JSON type to python object
     else:
         print("cache miss!")
         r = {"user": user_name.title(), "passkey": random.randint(00000, 99999)}
-        cache.set(user_name, json.dumps(r))
+        cache.set(user_name, json.dumps(r))     # json.dump: convert python obj to JSON string 
         return JSONResponse(r)  # convert python dictionary to json http response type
 
 
