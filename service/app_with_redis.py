@@ -25,15 +25,14 @@ def get_passkey(user_name:str) :
     cache = rd.get(user_name)
     if cache :
         print('cache hit!') 
-        return json.loads(cache)        # convert JSON to python dict
+        return json.loads(cache)        # convert JSON string to python dict because we're saving it into JSON string form
     else : 
         print('cache miss!')
         r = {"user": user_name.title(), "passkey" : random.randint(00000, 99999)}
-        rd.set(user_name, json.dumps(r))        # json.dumps - convert JSON HTTP response type into JSON string, making it suitable for redis db
+        rd.set(user_name, json.dumps(r))        # json.dumps - python dict into JSON string, making it suitable for redis db
         return JSONResponse(r)
 
-if __name__ == "__main__" : 
-    import uvicorn
-    uvicorn.run(app, host="127.0.0.1", port=8000)
 
-# install "httpie" to access API through "http :8000/name/..." cmd.
+# [it will look for changes in whole project directory, to limit this score use --reload-dir ./dir_name]
+# server cmd: uvicorn service.fastapi_redis:app --reload --reload-dir ./service --host 127.0.0.1 --port 8000 
+# install "httpie" to access API through "http :8000" cmd.

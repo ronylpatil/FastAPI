@@ -98,4 +98,6 @@ if __name__ == "__main__":
 
 # app_name: api3 (file name)
 # port: 8000 (default)
-# cmd: uvicorn service.app3:app --reload
+# [it will look for changes in whole project directory, to limit this score use --reload-dir ./dir_name]
+# server cmd: uvicorn service.fastapi_redis:app --reload --reload-dir ./service --host 127.0.0.1 --port 8000 
+# install "httpie" to access API through "http :8000" cmd.

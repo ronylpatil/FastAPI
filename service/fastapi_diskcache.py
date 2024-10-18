@@ -31,9 +31,6 @@ def get_passkey(user_name: str):
         return JSONResponse(r)  # convert python dictionary to json http response type
 
 
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="127.0.0.1", port=8000)
-
-# install "httpie" to access API through "http :8000/name/..." cmd.
+# [it will look for changes in whole project directory, to limit this score use --reload-dir ./dir_name]
+# server cmd: uvicorn service.fastapi_redis:app --reload --reload-dir ./service --host 127.0.0.1 --port 8000 
+# install "httpie" to access API through "http :8000" cmd.
